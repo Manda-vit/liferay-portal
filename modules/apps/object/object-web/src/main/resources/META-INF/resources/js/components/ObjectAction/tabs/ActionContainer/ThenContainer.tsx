@@ -69,17 +69,15 @@ export function ThenContainer({
 	updateParameters,
 	values,
 }: ThenContainerProps) {
-	const [objectsOptions, setObjectOptions] = useState<ObjectsOptionsList>([]);
-
 	const [notificationTemplates, setNotificationTemplates] = useState<
 		CustomItem<number>[]
 	>([]);
 
-	const notificationTemplateLabel = useMemo(() => {
-		return notificationTemplates.find(
-			({value}) => value === values.parameters?.notificationTemplateId
-		)?.label;
-	}, [notificationTemplates, values.parameters]);
+	const [objectsOptions, setObjectOptions] = useState<ObjectsOptionsList>([]);
+
+	const [selectedObjectDefinition, setSelectedObjectDefinition] = useState(
+		''
+	);
 
 	const actionExecutors = useMemo(() => {
 		const executors = new Map<string, string>();
@@ -90,6 +88,12 @@ export function ThenContainer({
 
 		return executors;
 	}, [newObjectActionExecutors]);
+
+	const notificationTemplateLabel = useMemo(() => {
+		return notificationTemplates.find(
+			({value}) => value === values.parameters?.notificationTemplateId
+		)?.label;
+	}, [notificationTemplates, values.parameters]);
 
 	useEffect(() => {
 		if (values.objectActionExecutorKey === 'notification') {
@@ -184,16 +188,12 @@ export function ThenContainer({
 								'choose-an-object'
 							)}
 							error={errors.objectDefinitionExternalReferenceCode}
-							onChange={({target: {value}}) =>
-								updateParameters(value)
-							}
-							options={objectsOptions}
-							value={
-								values.parameters
-									?.objectDefinitionExternalReferenceCode
-									? `${values.parameters.objectDefinitionExternalReferenceCode},${values.parameters.objectDefinitionId}`
-									: ''
-							}
+							items={objectsOptions}
+							onSelectChange={(label, value) => {
+								updateParameters(value);
+								setSelectedObjectDefinition(label);
+							}}
+							value={selectedObjectDefinition}
 						/>
 						{values.parameters?.relatedObjectEntries !==
 							undefined && (

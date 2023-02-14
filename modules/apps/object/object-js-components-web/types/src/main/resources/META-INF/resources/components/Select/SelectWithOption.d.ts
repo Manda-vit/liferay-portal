@@ -12,8 +12,25 @@
  * details.
  */
 
-import {ClaySelect} from '@clayui/form';
 import React from 'react';
+import './index.scss';
+declare type Item = {
+	label: string;
+	options: LabelValueObject[];
+	type: string;
+};
+interface SelectWithOptionProps
+	extends React.SelectHTMLAttributes<HTMLSelectElement> {
+	ariaLabel?: string;
+	disabled?: boolean;
+	error?: string;
+	feedbackMessage?: string;
+	items: Item[];
+	label?: string;
+	onSelectChange: (label: string, value: string) => void;
+	required?: boolean;
+	tooltip?: string;
+}
 export declare function SelectWithOption({
 	ariaLabel,
 	className,
@@ -21,27 +38,11 @@ export declare function SelectWithOption({
 	error,
 	feedbackMessage,
 	id,
+	items,
 	label,
+	onSelectChange,
 	required,
 	tooltip,
-	...otherProps
-}: IProps): JSX.Element;
-interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-	ariaLabel?: string;
-	disabled?: boolean;
-	error?: string;
-	feedbackMessage?: string;
-	label?: string;
-	options: Array<
-		(
-			| React.ComponentProps<typeof ClaySelect.Option>
-			| React.ComponentProps<typeof ClaySelect.OptGroup>
-		) & {
-			options?: Array<React.ComponentProps<typeof ClaySelect.Option>>;
-			type?: 'group';
-		}
-	>;
-	required?: boolean;
-	tooltip?: string;
-}
+	value,
+}: SelectWithOptionProps): JSX.Element;
 export {};
